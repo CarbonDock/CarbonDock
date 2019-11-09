@@ -18,11 +18,14 @@ def discover(port,timeout=5):
         if data.startswith('CarbonDock'):
             data = data.split('|')
             ret[data[1]] = data[2]
-    
-    return ret[1],ret[2]
+    ret2 = []
+    for i in ret.keys():
+        ret2.append([i,ret[i]])
+    return ret2
 
 @eel.expose
 def ips():
-
+    targets = discover(6768)
+    return targets
 
 eel.start('index.html', size=(300, 200))    # Start

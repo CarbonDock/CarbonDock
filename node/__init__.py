@@ -1,6 +1,5 @@
 import sys,os
 sys.path.insert(1,os.path.join('..'))
-print([os.path.abspath(i) for i in sys.path])
 from p2p import Node
 from envirobox import get_values
 from socket import *
@@ -41,7 +40,7 @@ class Handler(SimpleHTTPRequestHandler):
 
 if __name__ == '__main__':
     node = Node(6767,6768,'CarbonDock-'+gethostbyname(gethostname()),protocol='CarbonDock')
-    server = HTTPServer([gethostbyname(gethostname()),8000],Handler)
+    server = HTTPServer((gethostbyname(gethostname()),8000),Handler)
     server.serve_forever()
         
 
