@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CarbonDock</title>
+        
+        <p>
+            
+        Here's a list of the ips that this page has recieved:
+            
+        </p>
+        
+        <!-- Include eel.js - note this file doesn't exist in the 'web' directory -->
+        <script type="text/javascript" src="eel.js"></script>
+        <script type="text/javascript">
+
+        
+        eel.expose(say_hello_js);               // Expose this function to Python
+        function say_hello_js(x) {
+            console.log("Hello from " + x);
+        }
+
+        var targets = eel.ips();
+
+        eel.expose(httpGet);
+        function httpGet(url){
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", url, false);
+            
+            xmlHttp.send(null);
+            return xmlHttp.responseText;
+        }
+
+        for (var i = 0; i < targets; i++){
+            document.write(i);
+        }
+
+        
+
+        eel.say_hello_py("Javascript World!");  // Call a Python function
+        
+        </script>
+    </head>
+    
+    <body>
+        Hello, CarbonDock!
+    </body>
+</html>
