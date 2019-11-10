@@ -6,7 +6,7 @@ from PyQt5.QtGui import QColor
 from PyQt5.QtCore import QTimer
 from functools import partial
 from threading import Thread
-from p2p import Node
+from p2pl import Node
 
 class UI:
     def __init__(self):
@@ -47,18 +47,19 @@ class UI:
     def refresh(self):
         while True:
             discovered = []
+            print(self.node.targets)
             for n in self.node.targets.keys():
                 discovered.append([n,self.node.targets[n]])
             stats = []
-            for i in discovered:
-                stat = self.node.request(i[0],'status')
-                cf = stat['danger_coeff']
-                if cf < 0:
-                    cf = 0
-                if cf > 1:
-                    cf = 1
-                col = (cf*255,((1-cf)*255)/1.2,0)
-                stats.append({'color':col,'stat':stat['danger'],'name':i[0]})
+            #for i in discovered:
+            stat = self.node.request('192.168.137.156','status')
+            cf = stat['danger_coeff']
+            if cf < 0:
+                cf = 0
+            if cf > 1:
+                cf = 1
+            col = (cf*255,((1-cf)*255)/1.2,0)
+            stats.append({'color':col,'stat':stat['danger'],'name':'CarbonDock-192.168.137.156'})
                 
             self.stats = stats
 
