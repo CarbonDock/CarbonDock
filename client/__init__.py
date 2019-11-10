@@ -1,16 +1,12 @@
 from time import time
 from socket import *
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QLabel, QGraphicsColorizeEffect
-from PyQt5.QtGui import QColor, QFontDatabase, QIcon
-from PyQt5.QtCore import QTimer
+from PyQt5.QtGui import QColor, QFontDatabase, QIcon, QPalette, QBrush, QPixmap
+from PyQt5.QtCore import QTimer, Qt
 from functools import partial
 from threading import Thread
-<<<<<<< HEAD
 from p2pl import Node
-=======
-from p2p import Node
 import os
->>>>>>> 4d4d591740e2fd92955265a6921e921aefc853a2
 
 """
 Main UI program:
@@ -28,11 +24,22 @@ class UI:
 
         self.window = QWidget()
         self.window.setWindowTitle('CarbonDock')
-        self.window.setGeometry(50,50,300,300)
+        self.window.setGeometry(50,50,500,500)
         self.window.setStyleSheet(open(os.path.join(os.path.abspath(os.curdir),'client','style.qss'),'r').read())
         self.layout = QVBoxLayout()
-        self.layout.addWidget(QLabel('CarbonDock'))
+        
+        self.titlebar = QWidget()
+        self.titlebar.setStyleSheet('background-color: rgba(0,0,0,0);border-image: null;')
+        self.titlelay = QVBoxLayout()
+        self.title = QLabel('CarbonDock')
+        self.title.setStyleSheet('font: 20pt;')
+        self.title.setAlignment(Qt.AlignCenter)
+        self.titlelay.addWidget(self.title)
+        self.titlebar.setLayout(self.titlelay)
+        self.layout.addWidget(self.titlebar)
+
         self.modStats = QWidget()
+        self.modStats.setStyleSheet('background-color: rgba(0,0,0,0);border-image: null;')
         self.modLayout = QVBoxLayout()
         self.modStats.setLayout(self.modLayout)
         self.stats = []
@@ -63,7 +70,6 @@ class UI:
     def refresh(self):
         while True:
             discovered = []
-            print(self.node.targets)
             for n in self.node.targets.keys():
                 discovered.append([n,self.node.targets[n]])
             stats = []
