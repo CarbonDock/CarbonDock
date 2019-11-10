@@ -2,7 +2,7 @@ from __future__ import print_function	# For Py2/3 compatibility
 from time import time
 from socket import *
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QLabel, QGraphicsColorizeEffect
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QFontDatabase
 from PyQt5.QtCore import QTimer
 from functools import partial
 from threading import Thread
@@ -18,8 +18,14 @@ class UI:
         self.rt = Thread(target=self.refresh,name='Refresher')
         self.rt.start()
         self.app = QApplication([])
+
+        QFontDatabase.addApplicationFont('main.ttf')
+
         self.window = QWidget()
+        with open('style.qss','r') as stylesheet:
+            self.window.setStyleSheet(stylesheet.read())
         self.layout = QVBoxLayout()
+        self.layout.addWidget(QLabel('CarbonDock'))
         self.modStats = QWidget()
         self.modLayout = QVBoxLayout()
         self.modStats.setLayout(self.modLayout)
