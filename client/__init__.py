@@ -1,6 +1,6 @@
 from time import time
 from socket import *
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QLabel, QGraphicsColorizeEffect
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QLabel, QGraphicsColorizeEffect, QHBoxLayout
 from PyQt5.QtGui import QColor, QFontDatabase, QIcon, QPalette, QBrush, QPixmap
 from PyQt5.QtCore import QTimer, Qt
 from functools import partial
@@ -24,13 +24,19 @@ class UI:
 
         self.window = QWidget()
         self.window.setWindowTitle('CarbonDock')
-        self.window.setGeometry(50,50,500,500)
+        self.window.setGeometry(50,50,600,500)
         self.window.setStyleSheet(open(os.path.join(os.path.abspath(os.curdir),'client','style.qss'),'r').read())
         self.layout = QVBoxLayout()
         
         self.titlebar = QWidget()
         self.titlebar.setStyleSheet('background-color: rgba(0,0,0,0);border-image: null;')
-        self.titlelay = QVBoxLayout()
+        self.titlelay = QHBoxLayout()
+
+        label = QLabel()
+        pixmap = QPixmap('icon.png').scaled(128,128)
+        label.setPixmap(pixmap)
+        self.titlelay.addWidget(label)
+
         self.title = QLabel('CarbonDock')
         self.title.setStyleSheet('font: 20pt;')
         self.title.setAlignment(Qt.AlignCenter)
