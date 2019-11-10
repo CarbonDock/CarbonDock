@@ -1,12 +1,12 @@
-from __future__ import print_function	# For Py2/3 compatibility
 from time import time
 from socket import *
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QLabel, QGraphicsColorizeEffect
-from PyQt5.QtGui import QColor, QFontDatabase
+from PyQt5.QtGui import QColor, QFontDatabase, QIcon
 from PyQt5.QtCore import QTimer
 from functools import partial
 from threading import Thread
 from p2p import Node
+import os
 
 """
 Main UI program:
@@ -17,13 +17,15 @@ class UI:
         self.node = Node(8888,6768,'Carbon-Client',protocol='CarbonDock')
         self.rt = Thread(target=self.refresh,name='Refresher')
         self.rt.start()
-        self.app = QApplication([])
+        self.app = QApplication(['CarbonDock'])
+        self.app.setWindowIcon(QIcon('icon.png'))
 
         QFontDatabase.addApplicationFont('main.ttf')
 
         self.window = QWidget()
-        with open('style.qss','r') as stylesheet:
-            self.window.setStyleSheet(stylesheet.read())
+        self.window.setWindowTitle('CarbonDock')
+        self.window.setGeometry(50,50,300,300)
+        self.window.setStyleSheet(open(os.path.join(os.path.abspath(os.curdir),'client','style.qss'),'r').read())
         self.layout = QVBoxLayout()
         self.layout.addWidget(QLabel('CarbonDock'))
         self.modStats = QWidget()
