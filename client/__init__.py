@@ -35,6 +35,7 @@ class UI:
         label = QLabel()
         pixmap = QPixmap('icon.png').scaled(128,128)
         label.setPixmap(pixmap)
+        label.setAlignment(Qt.AlignCenter)
         self.titlelay.addWidget(label)
 
         self.title = QLabel('CarbonDock')
@@ -69,7 +70,14 @@ class UI:
             main = QWidget()
             main.setStyleSheet('background-color: rgb('+','.join(map(str,i['color']))+')')
             mlayout = QVBoxLayout()
-            mlayout.addWidget(QLabel(i['name'] + ': ' + i['stat']))
+            statLab = QLabel(i['stat'])
+            statLab.setStyleSheet('font: 15pt;')
+            statLab.setAlignment(Qt.AlignCenter)
+            mlayout.addWidget(statLab)
+            nameLab = QLabel(i['name'])
+            nameLab.setStyleSheet('font: 10pt;color:rgb(128,128,128);')
+            nameLab.setAlignment(Qt.AlignCenter)
+            mlayout.addWidget(nameLab)
             main.setLayout(mlayout)
             self.modLayout.addWidget(main)
         
