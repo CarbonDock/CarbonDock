@@ -1,22 +1,66 @@
 from __future__ import print_function	# For Py2/3 compatibility
 from time import time
 from socket import *
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QLabel, QGraphicsColorizeEffect
+from PyQt5.QtGui import QColor
+from PyQt5.QtCore import QTimer
+from functools import partial
+from threading import Thread
+from p2p import Node
 
-def discover(port,timeout=5):
-    s = socket(AF_INET, SOCK_DGRAM) #create UDP socket
-    s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
-    s.bind(('', port))
-    curtime = time()
-    ret = {}
-    while time() < curtime+timeout:
-        data, addr = s.recvfrom(1024) #wait for a packet
-        data = str(data)[2:].strip("'")
-        if data.startswith('CarbonDock'):
-            data = data.split('|')
-            ret[data[1]] = data[2]
-    ret2 = []
-    for i in ret.keys():
-        ret2.append([i,ret[i].split(':')[0]])
-    print(ret2)
-    return ret2
+class UI:
+    def __init__(self):
+        self.node = Node(8888,6768,'Carbon-Client',protocol='CarbonDock')
+        self.rt = Thread(target=self.refresh,name='Refresher')
+        self.rt.start()
+        self.app = QApplication([])
+        self.window = QWidget()
+        self.layout = QVBoxLayout()
+        self.modStats = QWidget()
+        self.modLayout = QVBoxLayout()
+        self.modStats.setLayout(self.modLayout)
+        self.stats = []
+        self.layout.addWidget(self.modStats)
+        self.window.setLayout(self.layout)
+        self.window.show()
+        self.timer = QTimer()
+        self.timer.setInterval(100)
+        self.timer.setSingleShot(False)
+        self.timer.timeout.connect(self.check_refresh)
+        self.timer.start()
+        self.app.exec_()
+
+    def runButtonFunc(self,func):
+        func()
+
+    def check_refresh(self):
+        for i in reversed(range(self.modLayout.count())): 
+            self.modLayout.itemAt(i).widget().setParent(None)
+        for i in self.stats:
+            main = QWidget()
+            main.setStyleSheet('background-color: rgb('+','.join(map(str,i['color']))+')')
+            mlayout = QVBoxLayout()
+            mlayout.addWidget(QLabel(i['name'] + ': ' + i['stat']))
+            main.setLayout(mlayout)
+            self.modLayout.addWidget(main)
+        
+    def refresh(self):
+        while True:
+            discovered = []
+            for n in self.node.targets.keys():
+                discovered.append([n,self.node.targets[n]])
+            stats = []
+            for i in discovered:
+                stat = self.node.request(i[0],'status')
+                cf = stat['danger_coeff']
+                if cf < 0:
+                    cf = 0
+                if cf > 1:
+                    cf = 1
+                col = (cf*255,((1-cf)*255)/1.2,0)
+                stats.append({'color':col,'stat':stat['danger'],'name':i[0]})
+                
+            self.stats = stats
+
+UI()
 
