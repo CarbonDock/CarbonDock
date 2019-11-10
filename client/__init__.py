@@ -8,6 +8,10 @@ from functools import partial
 from threading import Thread
 from p2p import Node
 
+"""
+Main UI program:
+includes detection for the CO2 Monitor to the person's selected device
+"""
 class UI:
     def __init__(self):
         self.node = Node(8888,6768,'Carbon-Client',protocol='CarbonDock')
