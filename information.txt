@@ -1,0 +1,27 @@
+name:
+
+CarbonDock
+
+
+team:
+
+- graphics
+- website
+
+- program
+- engineering
+
+needs:
+
+- UI/UX
+- Twillio (send texts to phone)
+
+marketting:
+
+- smart homes (make homes smarter)
+- carbon sensor
+
+hardware:
+
+- raspberry pi
+- indicator light
